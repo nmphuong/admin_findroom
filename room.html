@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find Room - Rooms</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <div class="top-menu bg-primary py-2">
+    <div class="row p-0 m-0">
+      <div class="col-12 text-white">
+        <div class="row p-0 m-0 text-center align-items-center justify-content-center">
+          <div class="col-lg-6 logo"><a href="index.html" class="text-white">FindRoom</a></div>
+          <div class="col-lg-6 utility row justify-content-center">
+            <div class="user row align-items-center p-0 m-0">
+              <div class="avt avt-user mx-2" id="avatar-user">
+                <img class="w-100 h-100" src="" alt="">
+              </div>
+              <div class="name-user">
+                <span>
+                  <div class="btn-group">
+                    <button id="username" style="background: none; border: none;" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <span></span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                      <button class="dropdown-item text-danger" type="button" id="logout">Logout</button>
+                    </div>
+                  </div>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="wrapper">
+    <div id="sidebar-wrapper">
+      <ul class="sidebar-nav text-center px-4">
+        <li class="text-left">
+          <div id="accordion" class="myaccordion">
+            <div class="card">
+              <div class="card-header p-0" id="headingTwo">
+                <a href="index.html" class="text-dark py-2 menu-item"><i class="fas fa-users"></i>&nbsp;Quản lý người dùng</a>
+                <a href="room.html" class="text-primary py-2 menu-item"><i class="fas fa-house-user"></i>&nbsp;Quản lý phòng</a>
+              </div>
+              <!-- <div id="sidebar-shipping" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                <div class="card-body p-0">
+                  <ul class="p-0 list-unstyled">
+                    <li>Informatics</li>
+                    <li>Mathematics</li>
+                    <li>Greek</li>
+                    <li>Biostatistics</li>
+                    <li>English</li>
+                    <li>Nursing</li>
+                  </ul>
+                </div>
+              </div> -->
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div id="page-content-wrapper 0">
+      <div class="container-fluid 0">
+        <div class="row">
+          <div class="col-lg-12 p-0 d-menu-toggle">
+            <a href="#menu-toggle" class="btn" id="menu-toggle"><i class="fas fa-bars"></i></a>
+          </div>
+          <div class="col-12 container">
+            <div class="col-12">
+              <div class="row p-0 m-0">
+                <div class="col-lg-4 p-0 m-0 pb-2">
+                  <!-- <input type="text" placeholder="Tìm kiếm" class="form-control"> -->
+                  <button class="btn btn-primary" id="active-all">
+                    Duyệt tất cả
+                  </button>
+                </div>
+                <div class="col-lg-4 p-0 m-0 pb-2"></div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="row p-0 m-0 table-responsive">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Ảnh</th>
+                      <th>Tiêu đề</th>
+                      <th>Price</th>
+                      <th>Loại</th>
+                      <th>Địa chỉ</th>
+                      <th>Tác giả</th>
+                      <th>Ngày tạo</th>
+                      <th>Trạng thái</th>
+                      <th>Thao tác</th>
+                    </tr>
+                  </thead>
+                  <tbody id="table">
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="js/index.js"></script>
+    <script>
+      $('document').ready(function () {
+        sessionStorage.removeItem('room-id');
+        if (sessionStorage.getItem("token-find-room-admin") == null) {
+          window.location.href = "login.html";
+        }
+        $(document).on('click', '#logout', function () {
+          sessionStorage.removeItem("token-find-room-admin");
+          location.reload();
+        })
+        // ----------------------------------------------------------------------------------
+        var roomsAdmin = 'https://fpolyfindroom.herokuapp.com/rooms-admin';
+        var token = sessionStorage.getItem("token-find-room-admin");
+        jQuery.ajax({
+          url: roomsAdmin,
+          type: "GET",
+          headers: {"Authorization": token},
+          success: function(data){
+            var html = '';
+            if (data.data.length > 0) {
+              for(var i = 0; i < data.data.length; i++) {
+                var created = new Date(data.data[i].created_at).getDate() + '-' + (new Date(data.data[i].created_at).getMonth() + 1) + '-' + new Date(data.data[i].created_at).getFullYear();
+                html = html + `
+                <tr>
+                  <td class="img-product">
+                    <img src="` + data.data[i].image[0] + `" alt="" class="w-100">
+                  </td>
+                  <td class="total-bill text-center align-middle">` + data.data[i].title + `</td>
+                  <td class="total-bill text-center align-middle">` + data.data[i].price + `</td>
+                  <td class="refund-bill text-center align-middle">` + data.data[i].type + `</td>
+                  <td class="staus-bill text-center align-middle">` + data.data[i].location + `</td>
+                  <td class="action text-center align-middle">` + data.data[i].author.name + `</td>
+                  <td class="refund-bill text-center align-middle">` + created + `</td>
+                  <td class="refund-bill text-center align-middle">` + data.data[i].status + `</td>
+                  <td class="action text-center align-middle">
+                    <button id="` + data.data[i]._id + `" class="btn btn-warning nav-link edit"><i class="fas fa-edit"></i></button>&nbsp;
+                    <button id="` + data.data[i]._id + `" class="btn btn-danger nav-link delete"><i class="far fa-trash-alt"></i></button>
+                  </td>
+                </tr>`;
+              }
+            }
+            $('#table').fadeOut(100, function(data){
+              $('#table').html(html).fadeIn().delay(1000);
+            });
+          }
+        });
+        // -----------------------------------------------------------------------------------------------------
+        var profile = 'https://fpolyfindroom.herokuapp.com/profile';
+        var token = sessionStorage.getItem("token-find-room-admin");
+        jQuery.ajax({
+          url: profile,
+          type: "GET",
+          headers: {"Authorization": token},
+          success: function(data){
+            var username = `
+            <span id="username"> ` + data.data.name + ` </span>
+            `;
+            $('#username').fadeOut(100, function(data){
+              $('#username').html(username).fadeIn().delay(1000);
+            });
+            var image = `
+            <img class="w-100 h-100" src="` + data.data.avatar + `" alt="">
+            `;
+            $('#avatar-user').fadeOut(100, function(data){
+              $('#avatar-user').html(image).fadeIn().delay(1000);
+            });
+          }
+        });
+        // -------------------------
+        $(document).on('click', '.delete', function () {
+          if(confirm('Are you sure you want to delete this ?')) {
+            var id = $(this).attr('id');
+            var deleteRoom = 'https://fpolyfindroom.herokuapp.com/delete-room-admin/' + id;
+            var token = sessionStorage.getItem("token-find-room-admin");
+            jQuery.ajax({
+              url: deleteRoom,
+              type: "GET",
+              headers: {"Authorization": token},
+              success: function(data){
+                location.reload();
+              }
+            });
+          }
+        })
+        // -------------------------
+        $(document).on('click', '.edit', function () {
+          var id = $(this).attr('id');
+          sessionStorage.setItem('room-id', id);
+          window.location.href = "room-detail.html";
+        })
+        $(document).on('click', '#active-all', function () {
+          if(confirm('Are you sure you want to active all user ?')) {
+            var id = $(this).attr('id');
+            var activeUser = 'https://fpolyfindroom.herokuapp.com/update-all-room-admin';
+            var token = sessionStorage.getItem("token-find-room-admin");
+            jQuery.ajax({
+              url: activeUser,
+              type: "GET",
+              headers: {"Authorization": token},
+              success: function(data){
+                location.reload();
+              }
+            });
+          }
+        })
+      })
+    </script>
+</body>
+
+</html>
